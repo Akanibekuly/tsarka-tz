@@ -8,6 +8,8 @@ func (a *St) router() *gin.Engine {
 	rest := router.Group("/rest")
 	{
 		rest.POST("/substr/find", a.hSubstrFind)
+		rest.POST("/email/check", a.hFindEmails)
 	}
+
 	return router
 }
