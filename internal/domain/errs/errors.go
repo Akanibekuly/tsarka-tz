@@ -10,4 +10,5 @@ const (
 	InternalServerError = Err("internal_server_error")
 	BadRequest          = Err("bad_request")
 	ObjectNotFound      = Err("object_not_found")
+	PointerIsNil        = Err("pointer_is_nil")
 )
