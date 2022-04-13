@@ -13,7 +13,7 @@ type St struct {
 	sync.Mutex
 }
 
-func (m *St) New(lg interfaces.Logger) *St {
+func New(lg interfaces.Logger) *St {
 	return &St{
 		lg: lg,
 	}

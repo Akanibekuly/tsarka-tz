@@ -9,4 +9,5 @@ func (e Err) Error() string {
 const (
 	InternalServerError = Err("internal_server_error")
 	BadRequest          = Err("bad_request")
+	ObjectNotFound      = Err("object_not_found")
 )

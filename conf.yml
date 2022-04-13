@@ -1,2 +1,6 @@
 LOG_LEVEL: "info"
 HTTP_LISTEN: ":8080"
+
+REDIS_URL: "localhost:6379"
+REDIS_PSW: ""
+REDIS_DB: 0

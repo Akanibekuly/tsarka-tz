@@ -12,9 +12,10 @@ func (a *St) router() *gin.Engine {
 
 		counter := rest.Group("/counter")
 		{
-			counter.POST("/add/:val")
-			counter.POST("/sub/:val")
-			counter.GET("/val")
+			counter.POST("/add/:val", a.hAdd)
+			counter.POST("/sub/:val", a.hSub)
+			counter.GET("/val", a.hVal)
+			counter.DELETE("/val", a.hDel)
 		}
 	}
 

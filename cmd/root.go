@@ -22,9 +22,9 @@ func Execute() {
 
 	app := struct {
 		lg      interfaces.Logger
+		cache   interfaces.Cache
 		core    *core.St
 		restApi *httpc.St
-		cache   interfaces.Cache
 	}{}
 
 	debug := viper.GetBool("debug")
@@ -33,14 +33,14 @@ func Execute() {
 		log.Fatal(err)
 	}
 
-	app.core = core.New(app.lg)
-
 	app.cache = redis.New(
 		app.lg,
 		viper.GetString("REDIS_URL"),
 		viper.GetString("REDIS_PSW"),
 		viper.GetInt("REDIS_DB"),
 	)
+
+	app.core = core.New(app.lg, app.cache)
 
 	restApiEChan := make(chan error, 1)
 	app.restApi = httpc.New(

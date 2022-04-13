@@ -3,11 +3,13 @@ package core
 import "github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 
 type St struct {
-	lg interfaces.Logger
+	lg    interfaces.Logger
+	cache interfaces.Cache
 }
 
-func New(lg interfaces.Logger) *St {
+func New(lg interfaces.Logger, cache interfaces.Cache) *St {
 	return &St{
-		lg: lg,
+		lg:    lg,
+		cache: cache,
 	}
 }
