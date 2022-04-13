@@ -7,6 +7,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/cache/redis"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/httpapi/httpc"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/logger/zap"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/core"
@@ -23,6 +24,7 @@ func Execute() {
 		lg      interfaces.Logger
 		core    *core.St
 		restApi *httpc.St
+		cacher  *redis.St
 	}{}
 
 	debug := viper.GetBool("debug")

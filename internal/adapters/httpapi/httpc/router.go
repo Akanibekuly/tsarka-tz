@@ -9,6 +9,13 @@ func (a *St) router() *gin.Engine {
 	{
 		rest.POST("/substr/find", a.hSubstrFind)
 		rest.POST("/email/check", a.hFindEmails)
+
+		counter := rest.Group("/counter")
+		{
+			counter.POST("/add/:val")
+			counter.POST("/sub/:val")
+			counter.GET("/val")
+		}
 	}
 
 	return router
