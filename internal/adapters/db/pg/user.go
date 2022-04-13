@@ -15,7 +15,7 @@ const timeout = time.Second * 5
 func (d *St) UserGet(id int) (*entities.UserSt, error) {
 	query := `SELECT 
 				first_name, last_name
-				FROM user WHERE id = $1`
+				FROM users WHERE id = $1`
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -42,7 +42,7 @@ func (d *St) UserCreate(user *entities.UserSt) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	query := `INSERT INTO user (first_name, last_name)
+	query := `INSERT INTO users (first_name, last_name)
 				VALUES ($1,$2) RETURNING id`
 
 	var id int
@@ -62,7 +62,7 @@ func (d *St) UserUpdate(id int, user *entities.UserUpdateSt) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	query := `UPDATE user SET`
+	query := `UPDATE users SET`
 	var args []interface{}
 	if user.FirstName != nil {
 		args = append(args, *user.FirstName)
@@ -70,6 +70,9 @@ func (d *St) UserUpdate(id int, user *entities.UserUpdateSt) error {
 	}
 	if user.LastName != nil {
 		args = append(args, *user.LastName)
+		if len(args) == 2 {
+			query += ","
+		}
 		query += fmt.Sprintf(" last_name=$%d", len(args))
 	}
 
@@ -78,7 +81,7 @@ func (d *St) UserUpdate(id int, user *entities.UserUpdateSt) error {
 
 	_, err := d.conn.Exec(ctx, query, args...)
 	if err != nil {
-		d.lg.Errorw("[DATABASE] update user", err, "user", user, "id", id)
+		d.lg.Errorw("[DATABASE] update user", err, "user", user, "id", id, "query", query)
 		return errs.InternalServerError
 	}
 
@@ -89,7 +92,7 @@ func (d *St) UserDelete(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	_, err := d.conn.Exec(ctx, `DELETE FROM user WHERE id=$1`, id)
+	_, err := d.conn.Exec(ctx, `DELETE FROM users WHERE id=$1`, id)
 	if err != nil {
 		d.lg.Errorw("[DATABASE] delete user", err, "id", id)
 		return errs.InternalServerError

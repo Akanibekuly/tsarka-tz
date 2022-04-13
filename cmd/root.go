@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/cache/redis"
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db/pg"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/httpapi/httpc"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/logger/zap"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/core"
@@ -23,6 +24,7 @@ func Execute() {
 	app := struct {
 		lg      interfaces.Logger
 		cache   interfaces.Cache
+		db      interfaces.Db
 		core    *core.St
 		restApi *httpc.St
 	}{}
@@ -40,7 +42,13 @@ func Execute() {
 		viper.GetInt("REDIS_DB"),
 	)
 
-	app.core = core.New(app.lg, app.cache)
+	app.db = pg.New(app.lg)
+	if err := app.db.Connect(viper.GetString("PG_DSN")); err != nil {
+		return
+	}
+	defer app.db.Close()
+
+	app.core = core.New(app.lg, app.cache, app.db)
 
 	restApiEChan := make(chan error, 1)
 	app.restApi = httpc.New(

@@ -5,4 +5,4 @@ REDIS_URL: "localhost:6379"
 REDIS_PSW: ""
 REDIS_DB: 0
 
-PG_DSN: "postgres://postgres:secret@localhost:5432/dbname?sslmode=disable"
+PG_DSN: "postgres://postgres:secret@localhost:5432/users?sslmode=disable"

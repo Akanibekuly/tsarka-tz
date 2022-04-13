@@ -17,6 +17,14 @@ func (a *St) router() *gin.Engine {
 			counter.GET("/val", a.hVal)
 			counter.DELETE("/val", a.hDel)
 		}
+
+		user := rest.Group("/user")
+		{
+			user.GET("/:id", a.hUserGet)
+			user.POST("/", a.hUserCreate)
+			user.POST("/:id", a.hUserUpdate)
+			user.DELETE("/:id", a.hUserDelete)
+		}
 	}
 
 	return router

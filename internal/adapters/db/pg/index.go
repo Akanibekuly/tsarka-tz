@@ -30,11 +30,8 @@ func (d *St) Connect(dsn string) error {
 	return nil
 }
 
-func (d *St) Close() error {
-	err := d.conn.Close(context.Background())
-	if err != nil {
+func (d *St) Close() {
+	if err := d.conn.Close(context.Background()); err != nil {
 		d.lg.Errorw("[DATABASE] close conn", err)
 	}
-
-	return err
 }
