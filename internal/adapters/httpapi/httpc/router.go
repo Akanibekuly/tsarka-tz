@@ -25,6 +25,12 @@ func (a *St) router() *gin.Engine {
 			user.POST("/:id", a.hUserUpdate)
 			user.DELETE("/:id", a.hUserDelete)
 		}
+
+		hash := rest.Group("/hash")
+		{
+			hash.POST("/calc")
+			hash.GET("/result/:id")
+		}
 	}
 
 	return router
