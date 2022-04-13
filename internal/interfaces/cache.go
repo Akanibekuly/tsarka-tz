@@ -1,7 +1,9 @@
 package interfaces
 
-type Cacher interface {
-	Add(n int) error
-	Sub(n int) error
-	Val() (int, error)
+import "time"
+
+type Cache interface {
+	Get(key string) (int, bool, error)
+	Set(key string, value int, expiration time.Duration) error
+	Del(key string) error
 }

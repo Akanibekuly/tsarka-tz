@@ -24,7 +24,7 @@ func Execute() {
 		lg      interfaces.Logger
 		core    *core.St
 		restApi *httpc.St
-		cacher  *redis.St
+		cache   interfaces.Cache
 	}{}
 
 	debug := viper.GetBool("debug")
@@ -34,6 +34,13 @@ func Execute() {
 	}
 
 	app.core = core.New(app.lg)
+
+	app.cache = redis.New(
+		app.lg,
+		viper.GetString("REDIS_URL"),
+		viper.GetString("REDIS_PSW"),
+		viper.GetInt("REDIS_DB"),
+	)
 
 	restApiEChan := make(chan error, 1)
 	app.restApi = httpc.New(
