@@ -28,8 +28,8 @@ func (a *St) router() *gin.Engine {
 
 		hash := rest.Group("/hash")
 		{
-			hash.POST("/calc")
-			hash.GET("/result/:id")
+			hash.POST("/calc", a.hCalc)
+			hash.GET("/result/:id", a.hResult)
 		}
 	}
 

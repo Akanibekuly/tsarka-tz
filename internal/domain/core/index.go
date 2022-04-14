@@ -8,6 +8,7 @@ type St struct {
 	db    interfaces.Db
 
 	User interfaces.User
+	Hash interfaces.Hash
 }
 
 func New(lg interfaces.Logger, cache interfaces.Cache, db interfaces.Db) *St {
@@ -17,7 +18,8 @@ func New(lg interfaces.Logger, cache interfaces.Cache, db interfaces.Db) *St {
 		db:    db,
 	}
 
-	core.User = newUserService(db)
+	core.User = NewUserService(db)
+	core.Hash = NewHashService(lg, db)
 
 	return core
 }

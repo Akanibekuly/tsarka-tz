@@ -9,7 +9,7 @@ type UserService struct {
 	db interfaces.Db
 }
 
-func newUserService(db interfaces.Db) *UserService {
+func NewUserService(db interfaces.Db) *UserService {
 	return &UserService{
 		db: db,
 	}

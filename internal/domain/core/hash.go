@@ -16,7 +16,14 @@ type HashService struct {
 
 var partitionTable = crc64.MakeTable(crc64.ISO)
 
-func (h *HashService) Calc(s string) (string, error) {
+func NewHashService(lg interfaces.Logger, db interfaces.Db) *HashService {
+	return &HashService{
+		lg: lg,
+		db: db,
+	}
+}
+
+func (h *HashService) Calc(s []byte) (string, error) {
 	id := uuid.New().String()
 
 	if err := h.db.HashCreate(id); err != nil {
@@ -28,8 +35,8 @@ func (h *HashService) Calc(s string) (string, error) {
 	return id, nil
 }
 
-func (h *HashService) routine(s, id string) {
-	sum := crc64.Checksum([]byte(s), partitionTable)
+func (h *HashService) routine(s []byte, id string) {
+	sum := crc64.Checksum(s, partitionTable)
 	start := time.Now()
 
 	for time.Since(start) < time.Minute {
