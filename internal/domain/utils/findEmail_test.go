@@ -13,6 +13,7 @@ func TestIsEmails(t *testing.T) {
 	}{
 		{"a.kanibekuly@gmail.com", true},
 		{"test@gmail.com", true},
+		{"something", false},
 	}
 
 	for i, c := range cases {

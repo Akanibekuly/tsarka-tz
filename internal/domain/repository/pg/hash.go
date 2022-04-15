@@ -2,13 +2,25 @@ package pg
 
 import (
 	"context"
-
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/errs"
+	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"github.com/jackc/pgx/v4"
 )
 
-func (d *St) HashCreate(id string) error {
+type HashRepository struct {
+	lg   interfaces.Logger
+	conn *pgx.Conn
+}
+
+func NewHashRepository(lg interfaces.Logger, conn *pgx.Conn) *HashRepository {
+	return &HashRepository{
+		lg:   lg,
+		conn: conn,
+	}
+}
+
+func (d *HashRepository) HashCreate(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
@@ -21,7 +33,7 @@ func (d *St) HashCreate(id string) error {
 	return nil
 }
 
-func (d *St) HashGet(id string) (*entities.HashSt, error) {
+func (d *HashRepository) HashGet(id string) (*entities.HashSt, error) {
 	var hash entities.HashSt
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -43,7 +55,7 @@ func (d *St) HashGet(id string) (*entities.HashSt, error) {
 	return &hash, nil
 }
 
-func (d *St) HashUpdate(id string, hash *entities.HashSt) error {
+func (d *HashRepository) HashUpdate(id string, hash *entities.HashSt) error {
 	if hash == nil {
 		return errs.PointerIsNil
 	}

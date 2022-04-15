@@ -3,6 +3,7 @@ package pg
 import (
 	"context"
 	"fmt"
+	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"time"
 
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
@@ -12,7 +13,19 @@ import (
 
 const timeout = time.Second * 5
 
-func (d *St) UserGet(id int) (*entities.UserSt, error) {
+type UserRepository struct {
+	lg   interfaces.Logger
+	conn *pgx.Conn
+}
+
+func NewUserRepository(lg interfaces.Logger, conn *pgx.Conn) *UserRepository {
+	return &UserRepository{
+		lg:   lg,
+		conn: conn,
+	}
+}
+
+func (d *UserRepository) UserGet(id int) (*entities.UserSt, error) {
 	query := `SELECT 
 				first_name, last_name
 				FROM users WHERE id = $1`
@@ -35,7 +48,7 @@ func (d *St) UserGet(id int) (*entities.UserSt, error) {
 	return &user, nil
 }
 
-func (d *St) UserCreate(user *entities.UserSt) (int, error) {
+func (d *UserRepository) UserCreate(user *entities.UserSt) (int, error) {
 	if user == nil {
 		return 0, errs.PointerIsNil
 	}
@@ -55,7 +68,7 @@ func (d *St) UserCreate(user *entities.UserSt) (int, error) {
 	return id, nil
 }
 
-func (d *St) UserUpdate(id int, user *entities.UserUpdateSt) error {
+func (d *UserRepository) UserUpdate(id int, user *entities.UserUpdateSt) error {
 	if user == nil {
 		return errs.PointerIsNil
 	}
@@ -88,7 +101,7 @@ func (d *St) UserUpdate(id int, user *entities.UserUpdateSt) error {
 	return nil
 }
 
-func (d *St) UserDelete(id int) error {
+func (d *UserRepository) UserDelete(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 

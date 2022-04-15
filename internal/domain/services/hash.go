@@ -1,25 +1,26 @@
-package core
+package services
 
 import (
+	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
+	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"hash/crc64"
 	"time"
 
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
-	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"github.com/google/uuid"
 )
 
 type HashService struct {
 	lg interfaces.Logger
-	db interfaces.Db
+	db repository.Hash
 }
 
 var partitionTable = crc64.MakeTable(crc64.ISO)
 
-func NewHashService(lg interfaces.Logger, db interfaces.Db) *HashService {
+func NewHashService(lg interfaces.Logger, db repository.Hash) *HashService {
 	return &HashService{
-		lg: lg,
 		db: db,
+		lg: lg,
 	}
 }
 

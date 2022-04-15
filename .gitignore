@@ -1,2 +1,3 @@
 cmd/build
 conf.yml
+*.out

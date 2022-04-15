@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"context"
+	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
+	"github.com/jackc/pgx/v4"
 	"log"
 	"os"
 	"os/signal"
@@ -8,10 +11,9 @@ import (
 	"time"
 
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/cache/redis"
-	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db/pg"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/httpapi/httpc"
 	"github.com/Akanibekuly/tsarka-tz/internal/adapters/logger/zap"
-	"github.com/Akanibekuly/tsarka-tz/internal/domain/core"
+	"github.com/Akanibekuly/tsarka-tz/internal/domain/services"
 	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"github.com/spf13/viper"
 )
@@ -22,11 +24,11 @@ func Execute() {
 	loadConf()
 
 	app := struct {
-		lg      interfaces.Logger
-		cache   interfaces.Cache
-		db      interfaces.Db
-		core    *core.St
-		restApi *httpc.St
+		lg       interfaces.Logger
+		cache    interfaces.Cache
+		reps     *repository.Repository
+		services *services.Services
+		restApi  *httpc.St
 	}{}
 
 	debug := viper.GetBool("debug")
@@ -42,20 +44,28 @@ func Execute() {
 		viper.GetInt("REDIS_DB"),
 	)
 
-	app.db = pg.New(app.lg)
-	if err := app.db.Connect(viper.GetString("PG_DSN")); err != nil {
-		return
+	conn, err := pgx.Connect(context.Background(), viper.GetString("PG_DSN"))
+	if err != nil {
+		log.Fatal(err)
 	}
-	defer app.db.Close()
+	defer func() {
+		err := conn.Close(context.Background())
+		app.lg.Errorw("database close", err)
+	}()
 
-	app.core = core.New(app.lg, app.cache, app.db)
+	app.reps = repository.New(app.lg, conn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	app.services = services.New(app.lg, app.cache, app.reps)
 
 	restApiEChan := make(chan error, 1)
 	app.restApi = httpc.New(
 		app.lg,
 		viper.GetString("HTTP_LISTEN"),
 		restApiEChan,
-		app.core,
+		app.services,
 	)
 
 	app.restApi.Start()

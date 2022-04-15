@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Akanibekuly/tsarka-tz/internal/domain/core"
+	"github.com/Akanibekuly/tsarka-tz/internal/domain/services"
 	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 )
 
@@ -13,10 +13,10 @@ type St struct {
 	lg     interfaces.Logger
 	eChan  chan<- error
 	server *http.Server
-	core   *core.St
+	core   *services.Services
 }
 
-func New(lg interfaces.Logger, listen string, eChan chan<- error, core *core.St) *St {
+func New(lg interfaces.Logger, listen string, eChan chan<- error, core *services.Services) *St {
 	api := &St{
 		lg:    lg,
 		eChan: eChan,

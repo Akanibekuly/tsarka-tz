@@ -1,15 +1,15 @@
-package core
+package services
 
 import (
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
-	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
+	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
 )
 
 type UserService struct {
-	db interfaces.Db
+	db repository.User
 }
 
-func NewUserService(db interfaces.Db) *UserService {
+func NewUserService(db repository.User) *UserService {
 	return &UserService{
 		db: db,
 	}
