@@ -1,8 +1,8 @@
-package repository
+package db
 
 import (
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db/pg"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
-	pg2 "github.com/Akanibekuly/tsarka-tz/internal/domain/repository/pg"
 	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"github.com/jackc/pgx/v4"
 )
@@ -27,7 +27,7 @@ type User interface {
 
 func New(lg interfaces.Logger, conn *pgx.Conn) *Repository {
 	return &Repository{
-		User: pg2.NewUserRepository(lg, conn),
-		Hash: pg2.NewHashRepository(lg, conn),
+		User: pg.NewUserRepository(lg, conn),
+		Hash: pg.NewHashRepository(lg, conn),
 	}
 }

@@ -1,8 +1,8 @@
 package services
 
 import (
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/entities"
-	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
 	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 )
 
@@ -31,7 +31,7 @@ type Services struct {
 	Counter
 }
 
-func New(lg interfaces.Logger, cache interfaces.Cache, reps *repository.Repository) *Services {
+func New(lg interfaces.Logger, cache interfaces.Cache, reps *db.Repository) *Services {
 	return &Services{
 		User: NewUserService(reps.User),
 		Hash: NewHashService(lg, reps.Hash),

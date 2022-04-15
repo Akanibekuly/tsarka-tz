@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db"
 	"github.com/Akanibekuly/tsarka-tz/internal/interfaces"
 	"hash/crc64"
 	"time"
@@ -12,12 +12,12 @@ import (
 
 type HashService struct {
 	lg interfaces.Logger
-	db repository.Hash
+	db db.Hash
 }
 
 var partitionTable = crc64.MakeTable(crc64.ISO)
 
-func NewHashService(lg interfaces.Logger, db repository.Hash) *HashService {
+func NewHashService(lg interfaces.Logger, db db.Hash) *HashService {
 	return &HashService{
 		db: db,
 		lg: lg,

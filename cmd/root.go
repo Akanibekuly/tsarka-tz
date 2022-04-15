@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	"github.com/Akanibekuly/tsarka-tz/internal/domain/repository"
+	"github.com/Akanibekuly/tsarka-tz/internal/adapters/db"
 	"github.com/jackc/pgx/v4"
 	"log"
 	"os"
@@ -26,7 +26,7 @@ func Execute() {
 	app := struct {
 		lg       interfaces.Logger
 		cache    interfaces.Cache
-		reps     *repository.Repository
+		reps     *db.Repository
 		services *services.Services
 		restApi  *httpc.St
 	}{}
@@ -53,7 +53,7 @@ func Execute() {
 		app.lg.Errorw("database close", err)
 	}()
 
-	app.reps = repository.New(app.lg, conn)
+	app.reps = db.New(app.lg, conn)
 	if err != nil {
 		log.Fatal(err)
 	}
