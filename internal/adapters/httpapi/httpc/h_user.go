@@ -20,7 +20,7 @@ func (a *St) hUserGet(c *gin.Context) {
 		return
 	}
 
-	user, err := a.core.User.Get(id)
+	user, err := a.services.User.Get(id)
 	if err != nil {
 		if err == errs.ObjectNotFound {
 			c.JSON(http.StatusNotFound, gin.H{
@@ -53,7 +53,7 @@ func (a *St) hUserCreate(c *gin.Context) {
 		return
 	}
 
-	id, err := a.core.User.Create(&user)
+	id, err := a.services.User.Create(&user)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"status": "error",
@@ -89,7 +89,7 @@ func (a *St) hUserUpdate(c *gin.Context) {
 		return
 	}
 
-	if err := a.core.User.Update(id, &user); err != nil {
+	if err := a.services.User.Update(id, &user); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"status": "error",
 			"error":  errs.InternalServerError,
@@ -114,7 +114,7 @@ func (a *St) hUserDelete(c *gin.Context) {
 		return
 	}
 
-	if err := a.core.User.Delete(id); err != nil {
+	if err := a.services.User.Delete(id); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"status": "err",
 			"error":  errs.InternalServerError,

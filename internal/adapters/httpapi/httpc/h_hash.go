@@ -1,7 +1,6 @@
 package httpc
 
 import (
-	"fmt"
 	"github.com/Akanibekuly/tsarka-tz/internal/domain/errs"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -19,9 +18,7 @@ func (a *St) hCalc(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(string(data))
-
-	id, err := a.core.Hash.Calc(data)
+	id, err := a.services.Hash.Calc(data)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"status": "error",
@@ -39,7 +36,7 @@ func (a *St) hCalc(c *gin.Context) {
 func (a *St) hResult(c *gin.Context) {
 	id := c.Param("id")
 
-	result, err := a.core.Hash.Result(id)
+	result, err := a.services.Hash.Result(id)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"status": "error",

@@ -19,7 +19,7 @@ func (a *St) hAdd(c *gin.Context) {
 		return
 	}
 
-	val, err = a.core.Add(val)
+	val, err = a.services.Counter.Add(val)
 	if err != nil {
 		if err == errs.ObjectNotFound {
 			a.lg.Warnw("[COUNTER] add: object not found")
@@ -53,7 +53,7 @@ func (a *St) hSub(c *gin.Context) {
 		})
 		return
 	}
-	val, err = a.core.Sub(val)
+	val, err = a.services.Counter.Sub(val)
 	if err != nil {
 		if err == errs.ObjectNotFound {
 			a.lg.Warnw("[COUNTER] add: object not found")
@@ -79,7 +79,7 @@ func (a *St) hSub(c *gin.Context) {
 }
 
 func (a *St) hVal(c *gin.Context) {
-	val, err := a.core.Val()
+	val, err := a.services.Counter.Val()
 	if err == errs.ObjectNotFound {
 		a.lg.Warnw("[COUNTER] add: object not found")
 		c.JSON(http.StatusNotFound, gin.H{
@@ -104,7 +104,7 @@ func (a *St) hVal(c *gin.Context) {
 }
 
 func (a *St) hDel(c *gin.Context) {
-	if err := a.core.Del(); err != nil {
+	if err := a.services.Counter.Del(); err != nil {
 		a.lg.Errorw("[COUNTER] delete", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": "error",

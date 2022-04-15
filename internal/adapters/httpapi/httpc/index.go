@@ -10,17 +10,17 @@ import (
 )
 
 type St struct {
-	lg     interfaces.Logger
-	eChan  chan<- error
-	server *http.Server
-	core   *services.Services
+	lg       interfaces.Logger
+	eChan    chan<- error
+	server   *http.Server
+	services *services.Services
 }
 
-func New(lg interfaces.Logger, listen string, eChan chan<- error, core *services.Services) *St {
+func New(lg interfaces.Logger, listen string, eChan chan<- error, services *services.Services) *St {
 	api := &St{
-		lg:    lg,
-		eChan: eChan,
-		core:  core,
+		lg:       lg,
+		eChan:    eChan,
+		services: services,
 	}
 
 	api.server = &http.Server{
