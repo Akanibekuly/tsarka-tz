@@ -33,7 +33,8 @@ type Services struct {
 
 func New(lg interfaces.Logger, cache interfaces.Cache, reps *db.Repository) *Services {
 	return &Services{
-		User: NewUserService(reps.User),
-		Hash: NewHashService(lg, reps.Hash),
+		Counter: NewCounterService(lg, cache),
+		User:    NewUserService(reps.User),
+		Hash:    NewHashService(lg, reps.Hash),
 	}
 }

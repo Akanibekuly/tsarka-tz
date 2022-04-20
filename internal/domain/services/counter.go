@@ -27,7 +27,6 @@ func NewCounterService(lg interfaces.Logger, cache interfaces.Cache) *CounterSt 
 func (c *CounterSt) Add(n int) (int, error) {
 	val, err := c.Val()
 	if err != nil && err != errs.ObjectNotFound {
-
 		return 0, err
 	}
 

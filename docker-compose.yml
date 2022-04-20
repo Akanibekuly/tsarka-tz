@@ -1,1 +1,16 @@
-version: "3"
+version: "3.6"
+services:
+  redis:
+    image: "docker.io/bitnami/redis"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_DB=tsdb
+    ports:
+      - "5432:5432"
